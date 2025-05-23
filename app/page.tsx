@@ -30,7 +30,7 @@ export default function Home() {
       id: 1,
       nombre: "Torta Merengue Chocolate",
       precio: 40000,
-      imagen: "/images/TortaMerengueChocolate.jpg",
+      imagen: "/images/TortaMerengueChocolate.jpg?height=300&width=400",
       descripcion: "Tradicional torta con frambuesas frescas y chocolate",
       cantidad: 0,
     },
@@ -38,34 +38,58 @@ export default function Home() {
       id: 2,
       nombre: "Pie de limón",
       precio: 5000,
-      imagen: "/images/pieDeLimon.jpg",
+      imagen: "/images/pieDeLimon.jpg?height=300&width=400",
       descripcion: "Deliciosos Pie de limon casero con merengue",
       cantidad: 0,
     },
     {
       id: 3,
-      nombre: "Torta Mil Hojas",
+      nombre: "Kuchen frutos rojos",
       precio: 15000,
-      imagen: "/placeholder.svg?height=300&width=400",
-      descripcion: "Clásica torta de mil hojas con manjar",
+      imagen: "/images/kuchenFrutosRojos.jpg?height=300&width=400",
+      descripcion: "Rico kuchen de frutos rojos",
       cantidad: 0,
     },
     {
       id: 4,
-      nombre: "Empolvados",
-      precio: 6000,
-      imagen: "/placeholder.svg?height=300&width=400",
-      descripcion: "Suaves galletas con azúcar flor",
+      nombre: "Kuchen choco frambuesa",
+      precio: 15000,
+      imagen: "/images/kuchenChocoFrambuesa.jpg?height=300&width=400",
+      descripcion: "Rico kuchen de chocolate y frambuesa",
       cantidad: 0,
     },
     {
       id: 5,
-      nombre: "Berlín",
+      nombre: "muffin de chocolate",
       precio: 4500,
-      imagen: "/placeholder.svg?height=300&width=400",
-      descripcion: "Esponjoso berlín relleno de crema pastelera",
+      imagen: "/images/muffin.jpg?height=300&width=400",
+      descripcion: "Deliciosos muffin de chocolate",
       cantidad: 0,
     },
+     {
+      id: 6,
+      nombre: "Rollito de canela",
+      precio: 4500,
+      imagen: "/images/rollitosCanela.jpg?height=300&width=400",
+      descripcion: "Esponjoso rollito de canela",
+      cantidad: 0,
+    },
+     {
+      id: 7,
+      nombre: "bandejaEmpanada",
+      precio: 4500,
+      imagen: "/images/bandejaEmpanadas.jpg?height=300&width=400",
+      descripcion: "Bandeja de empanadas de pino veganas",
+      cantidad: 0,
+    },
+    //  {
+    //   id: 5,
+    //   nombre: "Berlín",
+    //   precio: 4500,
+    //   imagen: "/placeholder.svg?height=300&width=400",
+    //   descripcion: "Esponjoso berlín relleno de crema pastelera",
+    //   cantidad: 0,
+    // },
   ])
 
   // Estado para el carrusel
@@ -270,13 +294,13 @@ export default function Home() {
       {/* Header */}
       <header className="bg-[#f8cce8] text-black py-4 px-4">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center">
-          <div className="flex items-center mb-4 md:mb-0">
-            <div className="relative h-20 w-20 mr-4">
-              <Image src="/images/logo.png" alt="Lupi Masas Logo" fill className="object-contain" />
+            <div className="relative h-24 w-24 mr-4">
+              <Image src="/images/logotra.png" alt="Lupi Masas Logo" fill className="object-contain" />
             </div>
+          <div className="flex items-center mb-4 md:mb-0">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold">Lupi Masas</h1>
-              <p className="text-sm md:text-base">Dulces y pasteles tradicionales chilenos</p>
+              <p className="text-sm md:text-base">Especialistas en Pasteleria Vegana</p>
             </div>
           </div>
         </div>
