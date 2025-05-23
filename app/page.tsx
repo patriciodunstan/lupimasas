@@ -124,170 +124,150 @@ export default function Home() {
     return productos.reduce((total, producto) => total + producto.precio * producto.cantidad, 0)
   }
 
-  // Función para enviar el pedido a Notion
-  const enviarPedidoNotion = async () => {
-    const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
+  const nombre = ref('')
+  const telefono = ref('')
+  const direccion = ref('')
+  const comentarios = ref('')
+  const productos = ref([
+    {
+      id: 1,
+      nombre: "Torta Merengue Chocolate",
+      precio: 40000,
+      imagen: "/images/TortaMerengueChocolate.jpg?height=300&width=400",
+      descripcion: "Tradicional torta con frambuesas frescas y chocolate",
+      cantidad: 0,
+    },
+])
 
-    try {
-      const response = await fetch("/api/notion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nombre,
-          telefono,
-          direccion,
-          productos: productosSeleccionados.map((p) => ({
-            nombre: p.nombre,
-            cantidad: p.cantidad,
-            precio: p.precio,
-          })),
-          total: calcularTotal(),
-          comentarios,
-          fecha: new Date().toISOString(),
-        }),
-      })
 
-      const data = await response.json()
+  const generarMensajeWhatsApp = () => {
+  const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
 
-      if (!response.ok) {
-        throw new Error(data.error || "Error al guardar en Notion")
-      }
+  let mensaje = `*Nuevo Pedido de Lupi Masas*%0A%0A`
+  mensaje += `*Nombre:* ${nombre}%0A`
+  mensaje += `*Teléfono:* ${telefono}%0A`
+  if (direccion) mensaje += `*Dirección:* ${direccion}%0A`
 
-      return data
-    } catch (error) {
-      console.error("Error al enviar a Notion:", error)
-      throw error
-    }
+  mensaje += `%0A*Productos:*%0A`
+  productosSeleccionados.forEach((p) => {
+    mensaje += `- ${p.nombre} x ${p.cantidad} = $${p.precio * p.cantidad}%0A`
+  })
+
+  mensaje += `%0A*Total:* $${calcularTotal()}%0A`
+  if (comentarios) mensaje += `%0A*Comentarios:* ${comentarios}%0A`
+
+  return mensaje
+}
+
+
+const validarFormulario = (): boolean => {
+  const soloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/
+  const soloNumeros = /^\d{9}$/ // 9 dígitos exactos
+
+  if (!nombre.trim() || !soloLetras.test(nombre.trim()) || nombre.trim().length < 3) {
+    alert("Por favor, ingresa un nombre válido (solo letras, mínimo 3 caracteres).")
+    return false
   }
+
+  if (!telefono.trim() || !soloNumeros.test(telefono.trim())) {
+    alert("Por favor, ingresa un número de teléfono válido (9 dígitos, sin +56).")
+    return false
+  }
+
+  if (direccion && direccion.trim().length < 5) {
+    alert("La dirección debe tener al menos 5 caracteres.")
+    return false
+  }
+
+  if (comentarios && comentarios.length > 200) {
+    alert("Los comentarios no pueden exceder los 200 caracteres.")
+    return false
+  }
+
+  const hayProductos = productos.some((p) => p.cantidad > 0)
+  if (!hayProductos) {
+    alert("Debes seleccionar al menos un producto.")
+    return false
+  }
+
+  return true
+}
+
+  // Función para enviar el pedido a Notion
+  // const enviarPedidoNotion = async () => {
+  //   const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
+
+  //   try {
+  //     const response = await fetch("/api/notion", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         nombre,
+  //         telefono,
+  //         direccion,
+  //         productos: productosSeleccionados.map((p) => ({
+  //           nombre: p.nombre,
+  //           cantidad: p.cantidad,
+  //           precio: p.precio,
+  //         })),
+  //         total: calcularTotal(),
+  //         comentarios,
+  //         fecha: new Date().toISOString(),
+  //       }),
+  //     })
+
+  //     const data = await response.json()
+
+  //     if (!response.ok) {
+  //       throw new Error(data.error || "Error al guardar en Notion")
+  //     }
+
+  //     return data
+  //   } catch (error) {
+  //     console.error("Error al enviar a Notion:", error)
+  //     throw error
+  //   }
+  // }
 
   // Función para enviar el pedido por WhatsApp y a Notion
   const enviarPedido = async () => {
-    // Filtrar solo los productos con cantidad > 0
-    const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
 
-    if (productosSeleccionados.length === 0) {
-      toast({
-        title: "Error",
-        description: "Por favor seleccione al menos un producto",
-        variant: "destructive",
-      })
-      return
-    }
+    // Validar el formulario
+    if (!validarFormulario()) return
 
-    if (!nombre || !telefono) {
-      toast({
-        title: "Error",
-        description: "Por favor complete su nombre y teléfono",
-        variant: "destructive",
-      })
-      return
-    }
+    const mensaje = generarMensajeWhatsApp();
+    
+    const telefonoDestino = "56971406550"
+    const urlWhatsApp = `https://api.whatsapp.com/send?phone=${telefonoDestino}&text=${encodeURIComponent(mensaje)}`
+    window.open(urlWhatsApp, "_blank")
+    // try{
+    //   const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
+    //   const pedido = {
+    //     nombre,
+    //     telefono,
+    //     direccion,
+    //     productos: productosSeleccionados.map((p) => ({
+    //       nombre: p.nombre,
+    //       cantidad: p.cantidad,
+    //       precio: p.precio,
+    //     })),
+    //     total: calcularTotal(),
+    //     comentarios,
+    //   }
 
+
+    // }catch(error){
+      
+    // }
+   
     setIsSubmitting(true)
 
-    try {
-      // Enviar a Notion
-      await enviarPedidoNotion()
-
-      // Crear el mensaje para WhatsApp
-      let mensaje = `*Nuevo Pedido de Lupi Masas*%0A%0A`
-      mensaje += `*Nombre:* ${nombre}%0A`
-      mensaje += `*Teléfono:* ${telefono}%0A`
-
-      if (direccion) {
-        mensaje += `*Dirección:* ${direccion}%0A`
-      }
-
-      mensaje += `%0A*Productos:*%0A`
-
-      productosSeleccionados.forEach((p) => {
-        mensaje += `- ${p.nombre} x ${p.cantidad} = $${p.precio * p.cantidad}%0A`
-      })
-
-      mensaje += `%0A*Total:* $${calcularTotal()}%0A`
-
-      if (comentarios) {
-        mensaje += `%0A*Comentarios:* ${comentarios}%0A`
-      }
-
-      // Número de WhatsApp de la pastelería
-      const numeroWhatsApp = "56971406550"
-
-      // Crear la URL de WhatsApp
-      const whatsappURL = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`
-
-      // Mostrar mensaje de éxito
-      toast({
-        title: "¡Pedido registrado!",
-        description: "Tu pedido ha sido guardado y enviado correctamente",
-      })
-
-      // Abrir WhatsApp en una nueva ventana
-      window.open(whatsappURL, "_blank")
-
-      // Limpiar el formulario
-      resetForm()
-    } catch (error) {
-      console.error("Error al procesar el pedido:", error)
-      toast({
-        title: "Error",
-        description: "Hubo un problema al procesar tu pedido. El pedido se enviará solo por WhatsApp.",
-        variant: "destructive",
-      })
-
-      // Intentar enviar solo por WhatsApp como fallback
-      enviarPedidoWhatsApp()
-    } finally {
-      setIsSubmitting(false)
-    }
+   
   }
 
-  // Función para enviar solo por WhatsApp (como fallback)
-  const enviarPedidoWhatsApp = () => {
-    // Filtrar solo los productos con cantidad > 0
-    const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
-
-    // Crear el mensaje para WhatsApp
-    let mensaje = `*Nuevo Pedido de Lupi Masas*%0A%0A`
-    mensaje += `*Nombre:* ${nombre}%0A`
-    mensaje += `*Teléfono:* ${telefono}%0A`
-
-    if (direccion) {
-      mensaje += `*Dirección:* ${direccion}%0A`
-    }
-
-    mensaje += `%0A*Productos:*%0A`
-
-    productosSeleccionados.forEach((p) => {
-      mensaje += `- ${p.nombre} x ${p.cantidad} = $${p.precio * p.cantidad}%0A`
-    })
-
-    mensaje += `%0A*Total:* $${calcularTotal()}%0A`
-
-    if (comentarios) {
-      mensaje += `%0A*Comentarios:* ${comentarios}%0A`
-    }
-
-    // Número de WhatsApp de la pastelería
-    const numeroWhatsApp = "56971406550"
-
-    // Crear la URL de WhatsApp
-    const whatsappURL = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`
-
-    // Abrir WhatsApp en una nueva ventana
-    window.open(whatsappURL, "_blank")
-  }
-
-  // Función para resetear el formulario
-  const resetForm = () => {
-    setNombre("")
-    setTelefono("")
-    setDireccion("")
-    setComentarios("")
-    setProductos(productos.map((p) => ({ ...p, cantidad: 0 })))
-  }
+ 
 
   return (
     <main className="min-h-screen bg-[#f8cce8]/30">
@@ -476,14 +456,8 @@ export default function Home() {
                 rows={3}
               />
             </div>
-
-            <Button
-              onClick={enviarPedido}
-              className="w-full bg-[#bce1f0] hover:bg-[#9dcbe0] text-[#000000]"
-              disabled={isSubmitting}
-            >
-              <Send className="mr-2 h-4 w-4" />
-              {isSubmitting ? "Enviando..." : "Enviar Pedido"}
+            <Button disabled={isSubmitting} onClick={enviarPedido}>
+              {isSubmitting ? "Enviando..." : "Enviar pedido"} <Send className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
