@@ -28,18 +28,18 @@ export default function Home() {
   const [productos, setProductos] = useState<Producto[]>([
     {
       id: 1,
-      nombre: "Kuchen de Frambuesa",
-      precio: 12000,
-      imagen: "/placeholder.svg?height=300&width=400",
-      descripcion: "Tradicional kuchen chileno con frambuesas frescas",
+      nombre: "Torta Merengue Chocolate",
+      precio: 40000,
+      imagen: "/images/TortaMerengueChocolate.jpg",
+      descripcion: "Tradicional torta con frambuesas frescas y chocolate",
       cantidad: 0,
     },
     {
       id: 2,
-      nombre: "Alfajores",
+      nombre: "Pie de limón",
       precio: 5000,
-      imagen: "/placeholder.svg?height=300&width=400",
-      descripcion: "Deliciosos alfajores rellenos de manjar",
+      imagen: "/images/pieDeLimon.jpg",
+      descripcion: "Deliciosos Pie de limon casero con merengue",
       cantidad: 0,
     },
     {
