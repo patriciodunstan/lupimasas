@@ -213,7 +213,7 @@ export default function Home() {
       }
 
       // Número de WhatsApp de la pastelería
-      const numeroWhatsApp = "56945822142"
+      const numeroWhatsApp = "56971406550"
 
       // Crear la URL de WhatsApp
       const whatsappURL = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`
@@ -271,7 +271,7 @@ export default function Home() {
     }
 
     // Número de WhatsApp de la pastelería
-    const numeroWhatsApp = "56945822142"
+    const numeroWhatsApp = "56971406550"
 
     // Crear la URL de WhatsApp
     const whatsappURL = `https://wa.me/${numeroWhatsApp}?text=${mensaje}`
