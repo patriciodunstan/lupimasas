@@ -124,20 +124,8 @@ export default function Home() {
     return productos.reduce((total, producto) => total + producto.precio * producto.cantidad, 0)
   }
 
-  const nombre = ref('')
-  const telefono = ref('')
-  const direccion = ref('')
-  const comentarios = ref('')
-  const productos = ref([
-    {
-      id: 1,
-      nombre: "Torta Merengue Chocolate",
-      precio: 40000,
-      imagen: "/images/TortaMerengueChocolate.jpg?height=300&width=400",
-      descripcion: "Tradicional torta con frambuesas frescas y chocolate",
-      cantidad: 0,
-    },
-])
+ 
+ 
 
 
   const generarMensajeWhatsApp = () => {
