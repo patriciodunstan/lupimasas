@@ -104,11 +104,11 @@ export default function Home() {
 
   // Funciones para el carrusel
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === productos.length - 1 ? 0 : prevIndex + 1))
+    setCurrentIndex((prevIndex: number) => (prevIndex === productos.length - 1 ? 0 : prevIndex + 1))
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? productos.length - 1 : prevIndex - 1))
+    setCurrentIndex((prevIndex: number) => (prevIndex === 0 ? productos.length - 1 : prevIndex - 1))
   }
 
   // Función para actualizar la cantidad de un producto
@@ -116,18 +116,18 @@ export default function Home() {
     if (nuevaCantidad < 0) return
 
     setProductos(
-      productos.map((producto) => (producto.id === id ? { ...producto, cantidad: nuevaCantidad } : producto)),
+      productos.map((producto: Producto) => (producto.id === id ? { ...producto, cantidad: nuevaCantidad } : producto)),
     )
   }
 
   // Función para calcular el total del pedido
   const calcularTotal = () => {
-    return productos.reduce((total, producto) => total + producto.precio * producto.cantidad, 0)
+    return productos.reduce((total: number, producto: Producto) => total + producto.precio * producto.cantidad, 0)
   }
 
   // Función para enviar el pedido a Notion
   const enviarPedidoNotion = async () => {
-    const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
+    const productosSeleccionados = productos.filter((p: Producto) => p.cantidad > 0)
 
     try {
       const response = await fetch("/api/notion", {
@@ -139,7 +139,7 @@ export default function Home() {
           nombre,
           telefono,
           direccion,
-          productos: productosSeleccionados.map((p) => ({
+          productos: productosSeleccionados.map((p: Producto) => ({
             nombre: p.nombre,
             cantidad: p.cantidad,
             precio: p.precio,
@@ -166,7 +166,7 @@ export default function Home() {
   // Función para enviar el pedido por WhatsApp y a Notion
   const enviarPedido = async () => {
     // Filtrar solo los productos con cantidad > 0
-    const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
+    const productosSeleccionados = productos.filter((p: Producto) => p.cantidad > 0)
 
     if (productosSeleccionados.length === 0) {
       toast({
@@ -203,7 +203,7 @@ export default function Home() {
 
       mensaje += `%0A*Productos:*%0A`
 
-      productosSeleccionados.forEach((p) => {
+      productosSeleccionados.forEach((p: Producto) => {
         mensaje += `- ${p.nombre} x ${p.cantidad} = $${p.precio * p.cantidad}%0A`
       })
 
@@ -248,7 +248,7 @@ export default function Home() {
   // Función para enviar solo por WhatsApp (como fallback)
   const enviarPedidoWhatsApp = () => {
     // Filtrar solo los productos con cantidad > 0
-    const productosSeleccionados = productos.filter((p) => p.cantidad > 0)
+    const productosSeleccionados = productos.filter((p: Producto) => p.cantidad > 0)
 
     // Crear el mensaje para WhatsApp
     let mensaje = `*Nuevo Pedido de Lupi Masas*%0A%0A`
@@ -261,7 +261,7 @@ export default function Home() {
 
     mensaje += `%0A*Productos:*%0A`
 
-    productosSeleccionados.forEach((p) => {
+    productosSeleccionados.forEach((p: Producto) => {
       mensaje += `- ${p.nombre} x ${p.cantidad} = $${p.precio * p.cantidad}%0A`
     })
 
@@ -287,7 +287,7 @@ export default function Home() {
     setTelefono("")
     setDireccion("")
     setComentarios("")
-    setProductos(productos.map((p) => ({ ...p, cantidad: 0 })))
+    setProductos(productos.map((p: Producto) => ({ ...p, cantidad: 0 })))
   }
 
   return (
